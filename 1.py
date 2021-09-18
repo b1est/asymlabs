@@ -1,0 +1,1 @@
+print("Proverka 1")
