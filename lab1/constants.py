@@ -1,3 +1,6 @@
+from math import inf
+from random import randint
+import sys
 def count_mask(n):
     res = 0
     for i in range(n):
@@ -20,3 +23,5 @@ masks = {
     n["l9"]: count_mask(n["l9"]),
     n["l10"]: count_mask(n["l10"])
     }
+
+lehmer_const = {'m': 2**32, 'a': 2**16+1, 'c': 119, 'x0': randint(1, sys.maxsize)}
