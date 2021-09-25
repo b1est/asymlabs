@@ -1,6 +1,8 @@
 import numpy as np
 from math import ceil
+
 class Lehmer:
+
     def __init__(self, const):
         self.m = const[0]
         self.a = const[1]
@@ -20,6 +22,7 @@ class Lehmer:
         return self.x
 
 class LehmerLow (Lehmer):
+
     def __init__(self, const):
         Lehmer.__init__(self, const)
         self.mask = 0xff
@@ -37,12 +40,13 @@ class LehmerLow (Lehmer):
 
         
 class LehmerHigh(Lehmer):
+
     def __init__(self, const):
         Lehmer.__init__(self, const)
-
-    def calc(self, n):
-        Lehmer.calc(self, n)
-        Lehmer.calc(self, n)
+        self.mask = 0xff
+        
+    def generate_bits(self, n):
+        Lehmer.calc(self, n)  
         res = 0
         first_len = len(bin(int(self.x[0]) & self.mask))-2
         for i in self.x:
