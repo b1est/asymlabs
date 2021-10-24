@@ -156,7 +156,7 @@ def Librarian(n): # n - Dlina fragmenta
 #         file.close()
 
 def main():
-    n = 100_000
+    n = 10_000
     # n = int(input("Input length of seq:"))
     print(f'\n{embedded_gen.__name__}:')
     # enter = input('Enter ....')
