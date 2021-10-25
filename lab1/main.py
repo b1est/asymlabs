@@ -27,44 +27,44 @@ class Generator:
     def geffe(self):
         geffe_ = self.geffe_.generate_bits(self.length_of_bit_sequence)
         with open("geffe.txt", "a") as f:
-            for i in range(self.length_of_bit_sequence):
-                f.write(str((geffe_>>i) & 1))
+            for i in range(0, self.length_of_bit_sequence, 8):
+                f.write(str((geffe_>>i) & 0xff)+'\n')
         print('Geffe done!')
 
     def lehmer_low(self):
         lehmer_low_ = self.lehmer_low_.generate_bits(self.length_of_bit_sequence)
         with open("lehmerlow.txt", "a") as f:
-            for i in range(self.length_of_bit_sequence):
-                f.write(str((lehmer_low_>>i) & 1))
+            for i in range(0, self.length_of_bit_sequence, 8):
+                f.write(str((lehmer_low_>>i) & 0xff)+'\n')
         print('LehmerLow done!')
         
     def lehmer_high(self):
         lehmer_high_ = self.lehmer_high_.generate_bits(self.length_of_bit_sequence)
         with open("lehmerhigh.txt", "a") as f:
-            for i in range(self.length_of_bit_sequence):
-                f.write(str((lehmer_high_>>i) & 1))
+            for i in range(0, self.length_of_bit_sequence, 8):
+                f.write(str((lehmer_high_>>i) & 0xff)+'\n')
         print('LehmerHigh done!')
  
 
     def l20(self):
         l20_ = self.l20_.generate_bits(self.length_of_bit_sequence)
         with open("l20.txt", "a") as f:
-            for i in range(self.length_of_bit_sequence):
-                f.write(str((l20_>>i) & 1))
+            for i in range(0, self.length_of_bit_sequence, 8):
+                f.write(str((l20_>>i) & 0xff)+'\n')
         print('L20 done!')
     
     def l89(self):
         l89_ = self.l89_.generate_bits(self.length_of_bit_sequence)
         with open("l89.txt", "a") as f:
-            for i in range(self.length_of_bit_sequence):
-                f.write(str((l89_>>i) & 1))
+            for i in range(0, self.length_of_bit_sequence, 8):
+                f.write(str((l89_>>i) & 0xff)+'\n')
         print('L89 done!')
 
     def wolfram(self):
         wolfram_ = self.wolfram_.generate_bits(self.length_of_bit_sequence)
         with open("wolfram.txt", "a") as f:
-            for i in range(self.length_of_bit_sequence):
-                f.write(str((wolfram_>>i) & 1))
+            for i in range(0, self.length_of_bit_sequence, 8):
+                f.write(str((wolfram_>>i) & 0xff)+'\n')
         print('Wolfram done!')
 
 
@@ -80,47 +80,62 @@ def results_of_generators(generator: Generator,  processes: int):
         pool.close()
         pool.join()
 
+def list_of_bytes(txt):
+        bytes = []
+        with open(txt, 'r') as f:
+            for line in f.readlines():
+                bytes.append(int(line[:-1]))
+        return bytes
 
 class Tests: 
     def __init__(self):
         self.txt_names = ('geffe.txt', 'l20.txt', 'l89.txt', 'lehmerhigh.txt', 'lehmerlow.txt', 'wolfram.txt')
         self.alphas = (0.01, 0.05, 0.1)
-        
+
+    
 
     def uniformityTest(self):
-        f = open('geffe.txt', "r").read()
-        r = 16
-        m2 = len(f) // r
-        n = m2*r
-        hi2 = 0
-        l = 255*(r-1)
-        f_ = [f[x:x+m2] for x in range (0, len(f), m2)]
-        for i in range(0, 256):
-            vi = len([i for x in range(0, len(f), 8) if int(f[x:x+8], 2) == i])
-            for j in range(r):
-                vi2 = pow(len([i for x in range(0, len(f_[j]), 8) if int(f_[j][x:x+8], 2) == i]), 2)
-                hi2 += (vi2 / (vi * m2))
-                
-        print(hi2)
-        hi2 = n*(hi2 - 1)
-        print(f'hi2 = {hi2}')
-        for alpha in self.alphas:
-            hi2teor = sqrt(2*l)*norm.ppf(1-alpha)+l    
-            print(f'hi2(1-{alpha}) = {hi2teor}')
-            if hi2 <= hi2teor:
-                print('ok')
-            else:
-                print('ne ok')
-
-
+        for txt in self.txt_names:
+            print(txt[:-4]+'(uniformity test):')
+            f = list_of_bytes(txt)
+            r = 16
+            m2 = len(f) // r
+            n = m2*r
+            hi2 = 0
+            l = 255*(r-1)
+            f_ = [f[x:x+m2] for x in range (0, len(f), m2)]
+            
+            for i in range(256):
+                vi = len([i for x in range(len(f)) if f[x] == i])
+                for j in range(r):  
+                    vi2 = len([i for x in range(len(f_[j]))  if f_[j][x] == i])**2
+                    hi2 += (vi2 / (vi * m2)) 
+                    
         
+            hi2 = (hi2-1)*n
+            
+        
+        
+            print(f'hi2 = {hi2}')
+            for alpha in self.alphas:
+                hi2teor = sqrt(2*l)*norm.ppf(1-alpha)+l    
+                print(f'hi2(1-{alpha}) = {hi2teor}')
+                if hi2 <= hi2teor:
+                    print('ok')
+                else:
+                    print('ne ok')
 
+
+            
 
 if __name__ == "__main__":
     
-    # generator = Generator(10**6)
-    # results_of_generators(generator, 4)
+    generator = Generator(10**6)
 
+    results_of_generators(generator, 4)
+    
+    
+    
     test = Tests()
     test.uniformityTest()
     
