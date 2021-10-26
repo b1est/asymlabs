@@ -102,19 +102,65 @@ def main():
     file_name4 = 'BM_bit.txt'
     file_name5 = 'embedded_gen.txt'
     file_name6 = 'Librarian.txt'
-    # print(Test_1(file_name1))
-    # print(Test_1(file_name2))
-    # print(Test_1(file_name3))
-    # print(Test_1(file_name4))
-    # print(Test_1(file_name5))
-    # print(Test_1(file_name6))
+    file_name7 = 'geffe_bytes.txt'
+    file_name8 = 'l20_bytes.txt'
+    file_name9 = 'l89_bytes.txt'
+    file_name10 = 'lehmerhigh_bytes.txt'
+    file_name11 = 'lehmerlow_bytes.txt'
+    file_name12 = 'wolfram_bytes.txt'
+    print("\nTest 1:")
+    print(f'{file_name1}')
+    print(Test_1(file_name1))
+    print(f'{file_name2}')
+    print(Test_1(file_name2))
+    print(f'{file_name3}')
+    print(Test_1(file_name3))
+    print(f'{file_name4}')
+    print(Test_1(file_name4))
+    print(f'{file_name5}')
+    print(Test_1(file_name5))
+    print(f'{file_name6}')
+    print(Test_1(file_name6))
+    print(f'{file_name7}')
+    print(Test_1(file_name7))
+    print(f'{file_name8}')
+    print(Test_1(file_name8))
+    print(f'{file_name9}')
+    print(Test_1(file_name9))
+    print(f'{file_name10}')
+    print(Test_1(file_name10))
+    print(f'{file_name11}')
+    print(Test_1(file_name11))
+    print(f'{file_name12}')
+    print(Test_1(file_name12))
 
-    # print(Test_2(file_name1))
-    # print(Test_2(file_name2))
-    # print(Test_2(file_name3))
-    # print(Test_2(file_name4))
-    # print(Test_2(file_name5))
+    print("\nTest 2:")
+    print(f'{file_name1}')
+    print(Test_2(file_name1))
+    print(f'{file_name2}')
+    print(Test_2(file_name2))
+    print(f'{file_name3}')
+    print(Test_2(file_name3))
+    print(f'{file_name4}')
+    print(Test_2(file_name4))
+    print(f'{file_name5}')
+    print(Test_2(file_name5))
+    print(f'{file_name6}')
     print(Test_2(file_name6))
+    print(f'{file_name7}')
+    print(Test_2(file_name7))
+    print(f'{file_name8}')
+    print(Test_2(file_name8))
+    print(f'{file_name9}')
+    print(Test_2(file_name9))
+    print(f'{file_name10}')
+    print(Test_2(file_name10))
+    print(f'{file_name11}')
+    print(Test_2(file_name11))
+    print(f'{file_name12}')
+    print(Test_2(file_name12))
+    
+
 
 if __name__ == '__main__':
     main()

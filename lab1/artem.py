@@ -8,6 +8,7 @@ import gmpy2 as gm
 import sys
 from io import StringIO
 import os
+import time
 def pow_mod(x, y, z):
     "Calculate (x ** y) % z efficiently."
     number = 1
@@ -115,23 +116,14 @@ def Librarian(n): # n - Dlina fragmenta
     with open("new_text.txt", 'r') as text:
         str_text = text.read()
         s_arr = bytearray(str_text, "utf-8")
-        bin_lst = []
+        byte_lst = []
 
         file = open('Librarian.txt', 'w')
         
         r = random.randint(0, len(str_text) - n)
-        print(f"Text : \n{s_arr[r:r+n]} \n Len = {len(s_arr[r:r+n])}")
-        for byte in s_arr[r:r+n]:
-            binary_rep = bin(byte)
-            binary_rep = binary_rep[2:]
-            while len(binary_rep) < 8:
-                binary_rep = f"0{binary_rep}"
-            bin_lst.append(binary_rep)
-
-        for i in trange(len(bin_lst)):
-            for j in bin_lst[i]:
-                file.write(f'{j}')
-        print()
+        # print(f"Text : \n{s_arr[r:r+n]} \n Len = {len(s_arr[r:r+n])}")
+        for i in trange(r, r+n):
+            file.write(f'{str(s_arr[i])}\n')
         file.close()
 
 
@@ -156,26 +148,22 @@ def Librarian(n): # n - Dlina fragmenta
 #         file.close()
 
 def main():
-    n = 10_000
-    # n = int(input("Input length of seq:"))
+    n = 1_000_000
+    print(f'N = {n}')
     print(f'\n{embedded_gen.__name__}:')
-    # enter = input('Enter ....')
     embedded_gen(n)
     print(f'\n{BM_bit.__name__}:')
-    # enter = input('Enter ....')
     BM_bit(n)
     print(f'\n{BM_byte.__name__}:')
-    # enter = input('Enter ....')
     BM_byte(n)
     print(f'\n{BBS_bit.__name__}:')
-    # enter = input('Enter ....')
     BBS_bit(n)
     print(f'\n{BBS_byte.__name__}:')
-    # enter = input('Enter ....')
     BBS_byte(n)
     print(f'\n{Librarian.__name__}:')
-    # enter = input('Enter ....')
     Librarian(n)
+
+
 
     
     
