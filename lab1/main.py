@@ -89,9 +89,9 @@ def list_of_bytes(txt):
 
 class Tests: 
     def __init__(self):
-        self.txt_names = ('geffe.txt', 'l20.txt', 'l89.txt', 'lehmerhigh.txt', 'lehmerlow.txt', 'wolfram.txt')
+        self.txt_names = ('geffe.txt', 'l20.txt', 'l89.txt', 'lehmerhigh.txt', 'lehmerlow.txt', 'wolfram.txt', 'BBS_byte.txt', 'BM_byte.txt', 'BBS_bit.txt', 'BM_bit.txt', 'embedded_gen.txt', 'Librarian.txt')
         self.alphas = (0.01, 0.05, 0.1)
-
+        self.uniformity_test_results = {} 
     
 
     def uniformityTest(self):
@@ -107,32 +107,44 @@ class Tests:
             
             for i in range(256):
                 vi = len([i for x in range(len(f)) if f[x] == i])
+                
                 for j in range(r):  
                     vi2 = len([i for x in range(len(f_[j]))  if f_[j][x] == i])**2
-                    hi2 += (vi2 / (vi * m2)) 
-                    
+                    try:
+                        hi2 += (vi2 / (vi * m2)) 
+                    except ZeroDivisionError:
+                        continue
         
             hi2 = (hi2-1)*n
             
         
         
-            print(f'hi2 = {hi2}')
+            print(f'\u03C7\u00B2 = {hi2}\n')
+            res = []
             for alpha in self.alphas:
-                hi2teor = sqrt(2*l)*norm.ppf(1-alpha)+l    
-                print(f'hi2(1-{alpha}) = {hi2teor}')
+                
+                hi2teor = sqrt(2*l)*norm(loc=0, scale=1).ppf(1-alpha)+l    
+                print(f'\u03B1 = {alpha}')
+                print(f'\u03C7\u00B2\u2081\u208B\u2090 = {hi2teor}')
                 if hi2 <= hi2teor:
-                    print('ok')
+                    print(f'Приймаємо гіпотезу на рівні \u03B1 = {alpha}')
+                    res.append(True)
                 else:
-                    print('ne ok')
+                    print(f'Відхиляємо гіпотезу на рівні \u03B1 = {alpha}')
+                    res.append(False)
+                print()
+            self.uniformity_test_results[txt[:-4]] = res
+        print(self.uniformity_test_results)
+            
 
 
             
 
 if __name__ == "__main__":
     
-    generator = Generator(10**6)
+    # generator = Generator(10**6)
 
-    results_of_generators(generator, 4)
+    # results_of_generators(generator, 4)
     
     
     
