@@ -121,9 +121,11 @@ class Tests:
         
             print(f'\u03C7\u00B2 = {hi2}\n')
             res = []
+            hiteor = []
             for alpha in self.alphas:
                 
-                hi2teor = sqrt(2*l)*norm(loc=0, scale=1).ppf(1-alpha)+l    
+                hi2teor = sqrt(2*l)*norm(loc=0, scale=1).ppf(1-alpha)+l 
+                hiteor.append(hi2teor)   
                 print(f'\u03B1 = {alpha}')
                 print(f'\u03C7\u00B2\u2081\u208B\u2090 = {hi2teor}')
                 if hi2 <= hi2teor:
@@ -133,7 +135,7 @@ class Tests:
                     print(f'Відхиляємо гіпотезу на рівні \u03B1 = {alpha}')
                     res.append(False)
                 print()
-            self.uniformity_test_results[txt[:-4]] = res
+            self.uniformity_test_results[txt[:-4]] = (res, hi2, hiteor)
         print(self.uniformity_test_results)
             
 
@@ -142,9 +144,9 @@ class Tests:
 
 if __name__ == "__main__":
     
-    # generator = Generator(10**6)
-
-    # results_of_generators(generator, 4)
+    generator = Generator(8*10**6)
+    generator.l20()
+    #results_of_generators(generator, 4)
     
     
     
