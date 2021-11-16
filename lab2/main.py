@@ -7,6 +7,7 @@ class MillerRabin:
         x = randint(2, p-1)
         if gcd(x, p) > 1:
             print(f'{p} - складене число')
+            print()
             return 1
         else:
             pass
