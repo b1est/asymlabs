@@ -96,15 +96,16 @@ class Tests:
 
     def uniformityTest(self):
         for txt in self.txt_names:
-            print(txt[:-4]+'(uniformity test):')
-            f = list_of_bytes(txt)
-            r = 16
-            m2 = len(f) // r
-            n = m2*r
-            hi2 = 0
-            l = 255*(r-1)
-            f_ = [f[x:x+m2] for x in range (0, len(f), m2)]
-            
+            try:           
+                f = list_of_bytes(txt)
+                r = 16
+                m2 = len(f) // r
+                n = m2*r
+                hi2 = 0
+                l = 255*(r-1)
+                f_ = [f[x:x+m2] for x in range (0, len(f), m2)]
+            except ValueError:
+                continue
             for i in range(256):
                 vi = len([i for x in range(len(f)) if f[x] == i])
                 
@@ -118,7 +119,7 @@ class Tests:
             hi2 = (hi2-1)*n
             
         
-        
+            print(txt[:-4]+'(uniformity test):')
             print(f'\u03C7\u00B2 = {hi2}\n')
             res = []
             hiteor = []
@@ -144,8 +145,8 @@ class Tests:
 
 if __name__ == "__main__":
     
-    generator = Generator(8*10**6)
-    generator.l20()
+    #generator = Generator(8*10**6)
+    #generator.l20()
     #results_of_generators(generator, 4)
     
     
