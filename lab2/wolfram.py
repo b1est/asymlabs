@@ -1,15 +1,14 @@
-from constants import count_mask
 from random import randint
 
 class Wolfram:
     
     def __init__(self, bits_size, r_init = None):
         if r_init == None:
-            self.r = randint(1, count_mask(bits_size))
+            self.r = randint(1, Wolfram.count_mask(bits_size))
         else:
             self.r = r_init
         self.bits_size = bits_size
-        self.mask = count_mask(bits_size)
+        self.mask = Wolfram.count_mask(bits_size)
  
     def get_bit(self):
         x = self.r % 2
@@ -21,3 +20,10 @@ class Wolfram:
         for i in range(size):
             result = (self.get_bit() << i) | result
         return result
+    
+    @staticmethod
+    def count_mask(n):
+        res = 0
+        for i in range(n):
+            res += 2 ** i
+        return res
