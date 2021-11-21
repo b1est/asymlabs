@@ -1,111 +1,121 @@
-from random import randint
-from wolfram import Wolfram
+from random_prime import random_prime_number
 
-
-class MillerRabin:
-    def __call__(self, p, k):
-        iter = 0
-        s = MillerRabin.num_of_power(p-1)
-        d = (p-1)//2**s
-        while iter < k:
-            x = randint(2, p-1)
-            if MillerRabin.gcd(x, p) > 1:
-                print(f'{hex(p)[2:].upper()} - складене число.')
-                return False
-            else:
-
-                pseudosimple = MillerRabin.strongly_pseudosimple_test(p, s, d, x)
-                if pseudosimple == True:
-                    iter += 1
-                else:
-                    print(f'{hex(p)[2:].upper()} - складене число.')
-                    return False
-                    
-                       
-        return True
+class user:
+    def __init__(self, size = 256):
+        print('Generating p & q:')
+        self.p = random_prime_number(size)
+        self.q = random_prime_number(size)
+        print(f'p = {hex(self.p)[2:].upper()}, q = {hex(self.q)[2:].upper()}')
+        print('Generating keys:')
+        self.__private_key, self.public_key = user.GenerateKeyPair(self.p, self.q)
+        self.n = self.public_key[0]
+        self.e = self.public_key[1]
 
     @staticmethod
-    def horner(x, a, m):
-        y = 1
-        alpha = list(str(bin(a))[2:])
-        alpha.reverse()
-        i = len(alpha)-1
-        while i >= 0:
-            y = (y**2) % m
-            if alpha[i] == '1':
-                y = (y*x) % m
-            else:
-                y = y%m
-            i-=1
-        return y
-    
-    @staticmethod
-    def strongly_pseudosimple_test(p, s, d, x):
-        tmp = MillerRabin.horner(x, d, p)
-        if tmp == 1 or tmp == p-1:
-            print(f'{hex(p)[2:].upper()} - сильно псевдопросте за основою {hex(x)[2:].upper()}.')
-            return True
+    def GenerateKeyPair(p,q):
+        n = p * q 
+        fi_n = (p-1) * (q-1)
+        e = 2**16 + 1
+        d = user.modinv(e,fi_n)
+        if (e*d) % fi_n == 1:
+            print(True)
         else:
-            xr = None
-            r = 1
-            while r <= s-1:
-                xr = MillerRabin.horner(x, d*2**r, p)
-                if xr != 1 and xr != p-1:
-                    r+=1
-                else:
-                    if xr == 1:
-                        print(f'{hex(p)[2:].upper()} - не сильно псевдопросте за основою {hex(x)[2:].upper()}.')
-                        return False
-                    if xr == p-1:
-                        print(f'{hex(p)[2:].upper()} - сильно псевдопросте за основою {hex(x)[2:].upper()}.')
-                        return True
-                    
-            print(f'{hex(p)[2:].upper()} - не сильно псевдопросте за основою {hex(x)[2:].upper()}.')
-            return False
+            exit(-1)
+        public_key = (n,e)
+        privat_key = (d)
+        return privat_key, public_key 
+        
+    @staticmethod
+    def egcd(a, b):
+        if a == 0:
+            return (b, 0, 1)
+        else:
+            g, y, x = user.egcd(b % a, a)
+            return (g, x - (b // a) * y, y)
 
     @staticmethod
-    def num_of_power(n, power = 2):
-        if isinstance(power, int):
-            s = 0
-            while n % power == 0:
-                s+=1
-                n//=power
-            return s
+    def modinv(a, m):
+        g, x, y = user.egcd(a, m)
+        if g != 1:
+            raise Exception('modular inverse does not exist')
+        else:
+            return x % m
 
-    @staticmethod
-    def gcd(a, b): 
-        while b != 0: 
-            a, b = b, a % b 
-        return a
+    def encrypt(self, M, e, n):
+        C = pow(M, e, n)
+        return C
 
-def random_prime_number(n):
-    mr = False
-    while mr == False:
-        gen = Wolfram(32).generate_bits(n)
-        print(f'Згенероване число: {hex(gen)[2:].upper()}.')
-        mr =  MillerRabin()(gen, 10)         
-    else:
-        return gen
+    def decrypt(self, C):
+        M = pow(C, self.__private_key, self.n)
+        return M
 
+    def sign(self, M):
+        S = pow(M, self.__private_key, self.n)
+        DS = (M, S)
+        return DS
+
+    def verify(self, DS, e, n):
+        M = DS[0]
+        S = DS[1]
+        if M == pow(S, e, n):
+            return True
+        return False
+
+# def Encrypt(M, e, n):
+#     C = pow(M,e,n)
+#     return C
+
+# def Decrypt(C, d, n):
+#     M = pow(C, d, n)
+#     return M
+
+# def Sign(M, d, n):
+#     S = pow(M, d, n)
+#     DS = (M, S)
+#     return DS
+
+# def Verify(DS, e, n):
+#     M = DS[0]
+#     S = DS[1]
+#     if M == pow(S,e,n):
+#         return True
+#     return False
+
+
+
+
+
+def main():
+    
+# Creating A & B:
+    A = user()
+    B = user()
+# Message:
+    M = int(input('M: '))
+# Encrypting message:
+#     C = Encrypt(M, A.e, A.n)
+    C = A.encrypt(M, B.e, B.n)
+# # Decrypting:
+#     M_decr = Decrypt(C, A.private_key, A.n)
+    M_decr = B.decrypt(C, B.n)
+# # Check if decrypted correctly:
+    if M == M_decr:
+        print(True)
+
+# # Forming Digital Sign:
+#     DS_A = Sign(M, A.private_key, A.n)
+    DS_A = A.sign(M, B.n)
+    print(DS_A)
+# # Verifying if DS is correct:
+    print(B.verify(DS_A, A.e, A.n))
+#     print(Verify(DS_A, A.e, A.n))
+    
+
+
+    
 
 
 
 
 if __name__ == "__main__":
-    """
-    val = 256                                                                              ДЛЯ БУДУЩЕЙ РАБОТЫ С http://asymcryptwebservice.appspot.com/rsa
-    payload = {'keySize': val}
-    r = requests.get('http://asymcryptwebservice.appspot.com/rsa/serverKey', params=payload)
-    
-    print(r.json())   
-    """
-    size = 256
-    
-    A = {'p': random_prime_number(size), 'q': random_prime_number(size)}
-    B = {'p': random_prime_number(size), 'q': random_prime_number(size)}
-    print(A, B)
-    
- 
-
-    
-    
+    main()
