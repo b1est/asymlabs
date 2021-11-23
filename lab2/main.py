@@ -1,4 +1,4 @@
-from random_prime import random_prime_number
+from random_prime import random_prime_number, MillerRabin
 
 class user:
     def __init__(self, size = 256):
@@ -61,54 +61,24 @@ class user:
             return True
         return False
 
-# def Encrypt(M, e, n):
-#     C = pow(M,e,n)
-#     return C
-
-# def Decrypt(C, d, n):
-#     M = pow(C, d, n)
-#     return M
-
-# def Sign(M, d, n):
-#     S = pow(M, d, n)
-#     DS = (M, S)
-#     return DS
-
-# def Verify(DS, e, n):
-#     M = DS[0]
-#     S = DS[1]
-#     if M == pow(S,e,n):
-#         return True
-#     return False
-
-
-
 
 
 def main():
+    B = user(256)
+    print(f'B.n = {hex(B.n)[2:].upper()}\nB.e = {hex(B.e)[2:].upper()}')
+    ser_n = int(input('Server\'s Modulus: '), 16)
+    ser_e = int(input('Server\'s Public exponent: '), 16)
     
-# Creating A & B:
-    A = user()
-    B = user()
-# Message:
+    
     M = int(input('M: '))
-# Encrypting message:
-#     C = Encrypt(M, A.e, A.n)
-    C = A.encrypt(M, B.e, B.n)
-# # Decrypting:
-#     M_decr = Decrypt(C, A.private_key, A.n)
-    M_decr = B.decrypt(C, B.n)
-# # Check if decrypted correctly:
-    if M == M_decr:
-        print(True)
+    
+    C = B.encrypt(M, ser_e, ser_n)
+    print(f'C = {hex(C)[2:].upper()}')
+    C = int(input(), 16)
+    M_decr = B.decrypt(C)
+    print(hex(M_decr)[2:].upper())
 
-# # Forming Digital Sign:
-#     DS_A = Sign(M, A.private_key, A.n)
-    DS_A = A.sign(M, B.n)
-    print(DS_A)
-# # Verifying if DS is correct:
-    print(B.verify(DS_A, A.e, A.n))
-#     print(Verify(DS_A, A.e, A.n))
+
     
 
 
