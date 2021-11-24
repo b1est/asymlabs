@@ -160,12 +160,12 @@ def ReceiveKey(k1, S1, n1, d1, e, n):
 # print(hex(2884713662)[2:])
 
 def main():
-    choice1 = ''
+# M = 'A1800BCF193288FFCDAECC90F89AAE200097BAED'
+    choice1 = '' # 1 - Server Encrypt, you Decrypt, 2 - you Encrypt, Server Decrypt
+    choice2 = '2' # 1 - you Sign, Server Verify, 2 - Server Sign, you Verify
+    choice3 = '' # 1 - Server Recieve Key, you Send Key, 2 - you Recieve Key, Server Send Key
     if choice1 == '1':
     # Decryption (you):
-        print("""Start:
-        Server - Encrypt, you - Decrypt
-        """)
         n, e, d = GenerateKeyPair(size=256)
         print(f'\nn = {hex(n)[2:]}')
         print(f'e = {hex(e)[2:]}')
@@ -183,7 +183,7 @@ def main():
         print(f'C: {hex(C)[2:]}')
 
 
-    choice2 = ''
+    
     if choice2 == '1':
     # Sign (you):
         n, e, d = GenerateKeyPair(size=256)
@@ -191,8 +191,9 @@ def main():
         print(f'e = {hex(e)[2:]}')
         M = input('M: ')
         DS = Sign(int(M, 16), d, n)
-        print(f"M = {hex(DS[0])[2:]}\n S = {hex(DS[1])[2:]}")
+        print(f"\nDS(M) = {hex(DS[0])[2:]}\n DS(S) = {hex(DS[1])[2:]}")
     elif choice2 == '2':
+    # Verify (you):
         n = input('n: ')
         e = input('e: ')
         n = int(n, 16)
@@ -202,7 +203,7 @@ def main():
         print(Verify((int(M, 16), int(S, 16)), e, n))
     
 
-    choice3 = ''
+    
     if choice3 == '1':
     # Send Key (you):
         n, e, d = GenerateKeyPair(256)
@@ -235,14 +236,14 @@ def main():
         
         print(ReceiveKey(int(k1, 16), int(S1, 16), n1, d1, e, n))
 # Send - Recieve Key:    
-    n, e, d = GenerateKeyPair(256)
-    n1, e1, d1 = GenerateKeyPair(256)
-    while n1 < n:
-        n, e, d = GenerateKeyPair(256)
-        n1, e1, d1 = GenerateKeyPair(256)
+    # n, e, d = GenerateKeyPair(256)
+    # n1, e1, d1 = GenerateKeyPair(256)
+    # while n1 < n:
+    #     n, e, d = GenerateKeyPair(256)
+    #     n1, e1, d1 = GenerateKeyPair(256)
     
-    k1, S1 = SendKey(n, d, e1, n1)
-    print(ReceiveKey(k1, S1, n1, d1, e, n))
+    # k1, S1 = SendKey(n, d, e1, n1)
+    # print(ReceiveKey(k1, S1, n1, d1, e, n))
 
 
 
