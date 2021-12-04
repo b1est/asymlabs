@@ -70,6 +70,34 @@ def main():
     ser_e = int(input('Server\'s Public exponent: '), 16)
     
     
+<<<<<<< HEAD
+# Creating A & B:
+    A = user()
+    A.n = int('9AE448568F7B2EDB621B6B6A2C174519CAE7EE1AE8751AB7413CE270E66F2613', 16)
+    A.e = int( "10001", 16)
+    B = user()
+# Message:
+    M = input('M: ')
+    M = int(M, 16)
+# Encrypting message:
+#     C = Encrypt(M, A.e, A.n)
+    C = B.encrypt(M, A.e, A.n)
+    print(hex(C))
+# Decrypting:
+#     M_decr = Decrypt(C, A.private_key, A.n)
+    M_decr = B.decrypt(C)
+# # Check if decrypted correctly:
+    if M == M_decr:
+        print(True)
+
+# # Forming Digital Sign:
+#     DS_A = Sign(M, A.private_key, A.n)
+    DS_A = A.sign(M)
+    print(hex(DS_A[0])[2:], hex(DS_A[1])[2:])
+# # Verifying if DS is correct:
+    print(B.verify(DS_A, A.e, A.n))
+#     print(Verify(DS_A, A.e, A.n))
+=======
     M = int(input('M: '))
     
     C = B.encrypt(M, ser_e, ser_n)
@@ -79,6 +107,7 @@ def main():
     print(hex(M_decr)[2:].upper())
 
 
+>>>>>>> 32876b57893ce495143e0336cc513ba98c6407f4
     
 
 
