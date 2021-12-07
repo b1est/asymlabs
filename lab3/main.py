@@ -16,6 +16,7 @@ def SerEncIDec(a, server, m):
          m = hex(m)[2:].upper()
     ycc = server.encryptServer(a.n, a.b, m)
     message = removePadding(hex(Rabin.decrypt(ycc, a.pq, a.b))[2:])
+    print(f'Message: {hex(message)[2:].upper()}')
     if hex(message)[2:].upper() == m:
         return True
     return False
@@ -28,7 +29,7 @@ def IEncSerDec(a, server, m):
     y, parity, jacobi = Rabin.encrypt(x, server.b, server.modulus)
   
     message = server.decryptServer(y, parity, jacobi)
-    
+    print(f'Message: {message}')
     if message == m:
         return True
     return False
@@ -80,33 +81,33 @@ def main(size = 256):
         print(f'n = {hex(a.n)[2:].upper()}\nb = {hex(a.b)[2:].upper()}') 
 
         print("\033[36mServer encrypts, we decrypt\033[0m")
-        m = message_checking(int(input('Message: '), 16), ser.modulus)
+        m = message_checking(int(input('Message: '), 16), a.n)
         print(f'm = {hex(m)[2:].upper()}') 
         if SerEncIDec(a, ser, m) == True:
             print("\033[32mOk!\033[0m")
         else:
             print('\033[3;31mError: Server encrypts, we decrypt\033[0m')
-
+        print("---------------------------------------------------------------------------------------------------------------------")
         print("\033[36mWe encrypt, server decrypts\033[0m")
-        m = message_checking(int(input('Message: '), 16), ser.modulus)
+        m = message_checking(int(input('Message: '), 16), a.n)
         print(f'm = {hex(m)[2:].upper()}') 
         if IEncSerDec(a, ser, m) == True:
             print("\033[32mOk!\033[0m")
         else:
             print('\033[3;31mError: We encrypt, server decrypts\033[0m')
-
+        print("---------------------------------------------------------------------------------------------------------------------")
         print("\033[36mServer sign, we verify\033[0m")
         m = input('Message: ').upper()
         newM = input('New Message (not necessary): ').upper()
         print(f'm = {m}') 
         SerSignIVer(a, ser, m, newM)
-
+        print("---------------------------------------------------------------------------------------------------------------------")
         print("\033[36mWe sign, server verify\033[0m")
         m = input('Message: ').upper()
         newM = input('New Message (not necessary): ').upper()
         print(f'm = {m}') 
         ISignSerVer(a, ser, m, newM)
-
+        print("---------------------------------------------------------------------------------------------------------------------")
         print("\033[36mZero Knowledge Protocol\033[0m")
         a = znpServer()
     
