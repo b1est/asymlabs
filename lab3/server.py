@@ -11,7 +11,7 @@ from random import getrandbits
 class rabinServer:
     def __init__(self, size):
         self.s =  requests.Session()
-        url = f"http://asymcryptwebservice.appspot.com/rabin/serverKey?keySize={size}"
+        url = f"http://asym-crypt-study.herokuapp.com/rabin/serverKey?keySize={size}"
         r = self.s.get(url)
         self.b, self.modulus = int(r.json()['b'], 16), int(r.json()['modulus'], 16)
 
@@ -22,14 +22,14 @@ class rabinServer:
             b = hex(b)[2:].upper()
         if isinstance(m, int):
             m = hex(m)[2:].upper()
-        url = f"http://asymcryptwebservice.appspot.com/rabin/encrypt?modulus={n}&b={b}&message={m}"
+        url = f"http://asym-crypt-study.herokuapp.com/rabin/encrypt?modulus={n}&b={b}&message={m}"
         r = self.s.get(url).json()
         return int(r['cipherText'], 16), r['parity'], r['jacobiSymbol']
 
     def decryptServer(self, y, parity, jacobi):
         if isinstance(y, int):
             y = hex(y)[2:].upper()
-        url = f"http://asymcryptwebservice.appspot.com/rabin/decrypt?cipherText={y}&expectedType=BYTES&parity={parity}&jacobiSymbol={jacobi}"
+        url = f"http://asym-crypt-study.herokuapp.com/rabin/decrypt?cipherText={y}&expectedType=BYTES&parity={parity}&jacobiSymbol={jacobi}"
         
         r = self.s.get(url)
         return r.json()['message']
@@ -38,7 +38,7 @@ class rabinServer:
     def signServer(self, m):
         if isinstance(m, int):
             m = hex(m)[2:].upper()
-        url = f"http://asymcryptwebservice.appspot.com/rabin/sign?message={m}"
+        url = f"http://asym-crypt-study.herokuapp.com/rabin/sign?message={m}"
         r = self.s.get(url).json()['signature']
         return r
     
@@ -49,7 +49,7 @@ class rabinServer:
             s = hex(s)[2:].upper()
         if isinstance(m, int):
             m = hex(m)[2:].upper()
-        url = f"http://asymcryptwebservice.appspot.com/rabin/verify?message={m}&type=BYTES&signature={s}&modulus={n}"
+        url = f"http://asym-crypt-study.herokuapp.com/rabin/verify?message={m}&type=BYTES&signature={s}&modulus={n}"
         r = self.s.get(url).json()['verified']
         return r
 
@@ -59,7 +59,7 @@ class znpServer:
     def __init__(self):
             print('Attack: ')
             self.s =  requests.Session()
-            url = "http://asymcryptwebservice.appspot.com/znp/serverKey"
+            url = "http://asym-crypt-study.herokuapp.com/znp/serverKey"
             n = self.s.get(url).json()['modulus']
             count = 0
             while True:
@@ -86,7 +86,7 @@ class znpServer:
             print(count)
         
     def znpChallenge(self, y): 
-        url = f"http://asymcryptwebservice.appspot.com/znp/challenge?y={y}"
+        url = f"http://asym-crypt-study.herokuapp.com/znp/challenge?y={y}"
         return self.s.get(url).json()['root']
 
         
